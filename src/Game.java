@@ -42,23 +42,23 @@ public class Game implements Logic {
 
         //Check each row
         for(int i = 0; i < 3; i++) {
-            if(boardToCheck[i][0] == boardToCheck[i][1] && boardToCheck[i][1] == boardToCheck[i][2] && boardToCheck[i][0] != Character.MIN_VALUE) {
+            if(boardToCheck[i][0] == boardToCheck[i][1] && boardToCheck[i][1] == boardToCheck[i][2] && boardToCheck[i][0] != '|') {
                 return true;
             }
         }
 
         //Check each column
         for(int j = 0; j < 3; j++) {
-            if(boardToCheck[0][j] == boardToCheck[1][j] && boardToCheck[1][j] == boardToCheck[2][j] && boardToCheck[0][j] != Character.MIN_VALUE) {
+            if(boardToCheck[0][j] == boardToCheck[1][j] && boardToCheck[1][j] == boardToCheck[2][j] && boardToCheck[0][j] != '|') {
                 return true;
             }
         }
 
         //Check the diagonals
-        if(boardToCheck[0][0] == boardToCheck[1][1] && boardToCheck[1][1] == boardToCheck[2][2] && boardToCheck[0][0] != Character.MIN_VALUE) {
+        if(boardToCheck[0][0] == boardToCheck[1][1] && boardToCheck[1][1] == boardToCheck[2][2] && boardToCheck[0][0] != '|') {
             return true;
         }
-        if(boardToCheck[2][0] == boardToCheck[1][1] && boardToCheck[1][1] ==  boardToCheck[0][2] && boardToCheck[2][0] != Character.MIN_VALUE) {
+        if(boardToCheck[2][0] == boardToCheck[1][1] && boardToCheck[1][1] ==  boardToCheck[0][2] && boardToCheck[2][0] != '|') {
             return true;
         }
 
@@ -67,27 +67,57 @@ public class Game implements Logic {
 
     }
 
+
+    /***
+     * The game constructor.
+     * @param board
+     * @param player1
+     * @param player2
+     */
     public Game(Board board, Player player1, Player player2) {
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
     }
 
-    public void Play(int x, int y) throws Exception {
 
-        if(stop==1) {
-            throw new Exception();
-        }
+    /***
+     * The method that plays a turn.
+     * @throws Exception
+     */
+    public void Play() throws Exception {
         counter += 1;
         char[][] obj = board.getBoard();
-        if(counter%2==0) {
-        obj[x][y] = 'X';
-        } else {
-            obj[x][y] = 'O';
+        if(counter < 2) {
+        DrawBoard(obj);
         }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please choose a position from 1-9.");
+        int move = scanner.nextInt();
 
+        if( move>9 | move < 1) {return;}
+
+        int zeroBased = move - 1;
+
+        int xFloored = (int) Math.floor(zeroBased / 3);
+        int yFloored = zeroBased - (xFloored * 3);
+        if(move == 1) {
+            if (counter % 2 == 0) {
+                obj[0][0] = 'X';
+            } else {
+                obj[0][0] = 'O';
+
+            }
+        } else {
+
+            if (counter % 2 == 0) {
+                obj[xFloored][yFloored] = 'X';
+            } else {
+                obj[xFloored][yFloored] = 'O';
+            }
+        }
         this.board.setBoard(obj);
-        var isWinDetected = checkForWinner();
+        Boolean isWinDetected = checkForWinner();
 
         if(!isWinDetected) {
             if(counter%2==0) {
@@ -104,13 +134,16 @@ public class Game implements Logic {
                 System.out.println("Player 1 has won! Congrats " + this.player1.getName()+"!!!");
 
             }
-            Scanner scanner = new Scanner(System.in);
+
+            DrawBoard(obj);
+
+            Scanner scannerExit = new Scanner(System.in);
 
             System.out.println("The program is about to exit, please press any key to exit.");
 
-            scanner.next();
+            scannerExit.next();
 
-            DrawBoard(obj);
+
 
             System.exit(0);
 
@@ -124,6 +157,7 @@ public class Game implements Logic {
         {
             for (int col = 0; col < visualize[row].length; col++)//Cycles through columns
             {
+
                 System.out.print(visualize[row][col]); //change the %5d to however much space you want
             }
             System.out.println(); //Makes a new row

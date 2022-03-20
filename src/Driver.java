@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Driver {
@@ -6,9 +7,11 @@ public class Driver {
     private Player player2;
 
     public static void main(String[] args) throws Exception {
-        var data = PreparePlayers();
+        ArrayList<Player> data = PreparePlayers();
 
-        char[][] dimension = new char[3][3];
+        char[][] dimension = {{'|','|','|' },{'|','|','|' },{'|','|','|' }};
+
+
         Board board = new Board("First match", dimension);
 
         Game game = new Game(board, data.get(0), data.get(1));
@@ -16,15 +19,9 @@ public class Driver {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Please enter the X position");
-            int x = scanner.nextInt();
-
-
-            System.out.println("Please enter the Y position");
-            int y = scanner.nextInt();
 
             try {
-            game.Play(x,y);
+            game.Play();
 
             } catch(Exception err) {
                 System.exit(0);
@@ -37,24 +34,24 @@ public class Driver {
     private static ArrayList<Player> PreparePlayers() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Player 1 please tell us your awesome name.");
+        System.out.println("Player 1 please tell us your  name.");
         String name1 = scanner.next();
 
-        System.out.println("Player 1 please tell us your awesome surname.");
+        System.out.println(name1 +" please tell us your surname.");
         String surname1 = scanner.next();
 
-        System.out.println("Player 1 please tell us your year of birth.");
+        System.out.println(name1 + " " + surname1 + " " + "please tell us your year of birth.");
         String yearOfBirth1 = scanner.next();
 
+        System.out.println("Thank you " + name1 + "!");
 
-
-        System.out.println("Player 2 please tell us your awesome name.");
+        System.out.println("Player 2 please tell us your name.");
         String name2 = scanner.next();
 
-        System.out.println("Player 2 please tell us your awesome surname.");
+        System.out.println(name2 +" please tell us your surname.");
         String surname2 = scanner.next();
 
-        System.out.println("Player 2 please tell us your year of birth.");
+        System.out.println(name2 + " " + surname2 + " " + "please tell us your year of birth.");
         String yearOfBirth2 = scanner.next();
 
         Player first = new Player(name1, surname1, Integer.parseInt(yearOfBirth1));
